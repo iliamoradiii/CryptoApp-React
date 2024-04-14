@@ -5,7 +5,7 @@ import chartDown from '../../assets/chart-down.svg'
 import styles from '../modules/TableCoin.module.css'
 import { marketChart } from '../../services/CryptoApi'
 
-function TableCoin({coins, isLoading, setChart}) {
+function TableCoin({coins, isLoading, setChart, currency}) {
   return (
     <>
       {isLoading ? 
@@ -24,7 +24,7 @@ function TableCoin({coins, isLoading, setChart}) {
             </thead>
             <tbody>
                 {coins.map(coin => 
-                    <TableRow coin={coin} key={coin.id} setChart={setChart} />
+                    <TableRow coin={coin} key={coin.id} setChart={setChart} currency={currency} />
                 )}
             </tbody>
         </table>
@@ -35,7 +35,7 @@ function TableCoin({coins, isLoading, setChart}) {
 
 export default TableCoin
 
-const TableRow = ({ coin, setChart }) => {
+const TableRow = ({ coin, setChart, currency }) => {
     const {id, name, image, symbol, total_volume, current_price, price_change_percentage_24h:price_change} = coin;
 
     const showHandler = async () => {
@@ -57,7 +57,11 @@ const TableRow = ({ coin, setChart }) => {
                 </div>
             </td>
             <td>{name}</td>
-            <td>{current_price.toLocaleString()}$</td>
+            <td>{current_price.toLocaleString()}
+            {currency === "usd"? "$" : null}
+            {currency === "eur"? "€" : null}
+            {currency === "jpy"? "¥" : null}
+            </td>
             <td className={price_change > 0 ? styles.success : styles.error}>{price_change.toFixed(2)}</td>
             <td>{total_volume.toLocaleString()}</td>
         
